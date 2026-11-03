@@ -1,0 +1,220 @@
+{
+  "seed": 20261029,
+  "prior": {
+    "family": "general",
+    "p_range": [
+      8,
+      256
+    ],
+    "n_range": [
+      16,
+      1024
+    ],
+    "latent_zero_prob": 0.3,
+    "latent_fraction_range": [
+      0.0,
+      0.3
+    ],
+    "indegree_range": [
+      0.4,
+      2.5
+    ],
+    "cauchy_graph_prob": 0.5,
+    "mechanism_weights": {
+      "linear": 0.3,
+      "additive": 0.3,
+      "mlp": 0.12,
+      "tree": 0.12,
+      "gp": 0.08,
+      "product": 0.08
+    },
+    "additive_set": [
+      "identity",
+      "tanh",
+      "sin",
+      "cos",
+      "square",
+      "abs",
+      "bump",
+      "relu",
+      "softplus",
+      "sigmoid"
+    ],
+    "noise_families": [
+      "gaussian",
+      "laplace",
+      "uniform",
+      "student_t",
+      "mixture"
+    ],
+    "noise_fraction_range": [
+      0.05,
+      0.95
+    ],
+    "binary_feature_prob": 0.1,
+    "ordinal_feature_prob": 0.1,
+    "ordinal_levels": [
+      3,
+      7
+    ],
+    "binary_y_prob": 0.3,
+    "measurement_discretization_prob": 0.2,
+    "n_ref": 512,
+    "component_weights": {
+      "scm": 0.5,
+      "xfirst": 0.5
+    },
+    "xfirst": {
+      "structure_weights": {
+        "independent": 0.1,
+        "factor": 0.25,
+        "hierarchical": 0.35,
+        "ar": 0.1,
+        "scm": 0.2
+      },
+      "transform_prob": 0.7,
+      "transform_weights": {
+        "exp": 0.4,
+        "zero_inflated": 0.2,
+        "cube": 0.1,
+        "sqrt": 0.1,
+        "uniform": 0.1,
+        "bimodal": 0.1
+      },
+      "all_discrete_prob": 0.15,
+      "all_transform_prob": 0.25,
+      "continuous_prob": 0.4,
+      "null_prob": 0.1,
+      "max_parent_fraction": 0.5,
+      "children_prob": 0.3,
+      "max_children": 3,
+      "max_spouses": 2,
+      "spouses_near_child": true,
+      "descendant_prob": 0.5,
+      "max_descendants": 2,
+      "child_share": 0.5,
+      "parent_uniform_prob": 0.33,
+      "max_product_terms": 3,
+      "child_keep_range": [
+        0.2,
+        0.8
+      ]
+    },
+    "p_uniform_prob": 0.5,
+    "n_uniform_prob": 0.5,
+    "additive_weights": {
+      "identity": 0.12,
+      "tanh": 0.12,
+      "sigmoid": 0.12,
+      "bump": 0.12,
+      "relu": 0.1,
+      "softplus": 0.1,
+      "square": 0.1,
+      "abs": 0.1,
+      "step": 0.08,
+      "sin": 0.02,
+      "cos": 0.02
+    },
+    "mlp_activations": [
+      "tanh",
+      "relu",
+      "sigmoid",
+      "bump",
+      "softplus",
+      "abs"
+    ],
+    "gp_length_range": [
+      1.0,
+      4.0
+    ],
+    "product_functions": [
+      "identity",
+      "tanh",
+      "sigmoid",
+      "bump",
+      "relu"
+    ],
+    "max_in_degree": 10,
+    "p_large_prob": 0.2,
+    "p_large_range": [
+      257,
+      512
+    ],
+    "scm_hubs": {
+      "prob": 0.5,
+      "weight_range": [
+        0.3,
+        0.9
+      ],
+      "node_share_range": [
+        0.5,
+        1.0
+      ]
+    },
+    "scm_y_neighbors": {
+      "prob": 0.5,
+      "max_parents": 12,
+      "max_children": 12,
+      "max_fraction": 0.25
+    },
+    "linear_gaussian_prob": 0.15,
+    "linear_gaussian": {
+      "mechanism_weights": {
+        "linear": 1.0
+      },
+      "noise_families": [
+        "gaussian"
+      ],
+      "latent_zero_prob": 1.0,
+      "binary_feature_prob": 0.0,
+      "ordinal_feature_prob": 0.0,
+      "binary_y_prob": 0.0,
+      "measurement_discretization_prob": 0.0,
+      "scm_hubs": {
+        "prob": 0.0,
+        "weight_range": [
+          0.3,
+          0.9
+        ],
+        "node_share_range": [
+          0.5,
+          1.0
+        ]
+      }
+    }
+  },
+  "model": {
+    "dim": 192,
+    "heads": 6,
+    "ff_dim": 768,
+    "blocks": 8,
+    "dropout": 0.0,
+    "pool": "mean_max",
+    "grad_checkpoint": false
+  },
+  "train": {
+    "cells_per_batch": 65536,
+    "max_batch_size": 64,
+    "lr": 0.0001,
+    "min_lr_ratio": 0.1,
+    "weight_decay": 0.0001,
+    "grad_clip": 1.0,
+    "warmup_steps": 2000,
+    "max_steps": 100000000,
+    "max_train_minutes": 720,
+    "val_datasets": 512,
+    "val_every": 1000,
+    "log_every": 50,
+    "prevalence_datasets": 4000,
+    "workers": 15,
+    "schedule": "wsd",
+    "decay_fraction": 0.15,
+    "checkpoint_cells": 150000,
+    "head_weights": [
+      0.0,
+      1.0,
+      1.0
+    ],
+    "val_match_training": true
+  }
+}
