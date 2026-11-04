@@ -6,7 +6,9 @@ Trains the network on datasets simulated from the prior in prior.py, or fine-tun
     python -m varselpfn.train --config my_prior.json --init cd_pfn --run-dir my_run   # fine-tune CD-PFN
 
 --config is a bundled config name ('cd_pfn', 'pc_pfn') or a path to a JSON file with the same blocks: prior (see
-prior.py, or gprior.py for the linear g-prior, "family": "gprior"), model, and train. --init starts from existing weights with a fresh optimizer: a bundled name or a path to a
+prior.py), model, and train. The prior's "family" can also be a path to a Python file, relative to the config, that
+defines sample_n, sample_p, sample_dataset, and sample_batch as in prior.py; datasets are then simulated from it.
+--init starts from existing weights with a fresh optimizer: a bundled name or a path to a
 .safetensors file or a checkpoint. Use the fine-tuned weights with CDPFN(weights='my_run/best.pt').
 
 Freshly simulated datasets are streamed from worker processes. Each batch draws n and p from the configured ranges;
@@ -23,6 +25,8 @@ Writes log.jsonl, best.pt, last.pt, prevalence.json, and train_summary.json to t
 '''
 
 import argparse
+from functools import cache
+import importlib.util
 import json
 import math
 import os
@@ -36,7 +40,7 @@ import torch
 import torch.nn.functional as F
 from torch.utils.data import DataLoader, IterableDataset
 
-from varselpfn import gprior, prior as general_prior
+from varselpfn import prior as general_prior
 from varselpfn.api import load_weights
 from varselpfn.model import Network, count_parameters
 from varselpfn.prior import sample_dataset_scm, sample_dataset_xfirst
@@ -72,15 +76,27 @@ class PriorStream(IterableDataset):
 #----------------------------------------------------------------
 # Helpers
 #----------------------------------------------------------------
+@cache
+def load_module(path):
+    spec = importlib.util.spec_from_file_location(Path(path).stem, path)
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
+
 def prior_module(prior):
-    '''Sampler for the prior's family: the general prior (prior.py) or the linear g-prior with exact PIPs (gprior.py).'''
-    return gprior if prior.get('family') == 'gprior' else general_prior
+    '''Sampler for the prior's family: the general prior (prior.py) or a user-supplied Python file.'''
+    family = prior.get('family', 'general')
+    return load_module(family) if family.endswith('.py') else general_prior
 
 def load_config(config):
-    '''A bundled config name or a path to a JSON file.'''
+    '''A bundled config name or a path to a JSON file; a prior family given as a Python file is resolved relative to it.'''
     path = config_dir / f'{config}.json' if (config_dir / f'{config}.json').exists() else Path(config).expanduser()
     with open(path) as f:
-        return json.load(f)
+        config = json.load(f)
+    family = config['prior'].get('family', 'general')
+    if family.endswith('.py'):
+        config['prior']['family'] = str((path.parent / family).resolve())
+    return config
 
 def get_device(name='auto'):
     if name == 'auto':

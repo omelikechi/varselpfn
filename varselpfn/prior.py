@@ -28,14 +28,13 @@ In the scm family, mechanisms (one family per node): additive edge functions (id
 Gaussian bump, relu, softplus, sigmoid, each with a random input scale and shift), small random MLPs over the parent
 vector, random Fourier-feature (GP-like) functions, products of two parent functions (interactions; for the X-first
 response, up to xfirst max_product_terms products of disjoint pairs, plus additive terms in the remaining parents),
-linear maps, and additive random trees (piecewise constant; 'tree'). The 'step' family (additive step functions only)
-has no weight in the released configs and is used for testing; step is also an additive edge function when
-additive_weights includes it.
+linear maps, and additive random trees (piecewise constant; 'tree'). Step functions are also an additive edge function
+when additive_weights includes them.
 
 Noise is additive with a random noise fraction r: z = sqrt(1 - r) f + sqrt(r) eps, where f and eps are standardized.
 Noise families: Gaussian, Laplace, uniform, Student-t (random degrees of freedom), two-component Gaussian mixture.
-Held-out noise family for testing: skewed gamma. Every node is standardized during generation (internally
-standardized SCM, Ormaniec et al. 2025), with moments taken from an independent reference sample of n_ref rows.
+Every node is standardized during generation (internally standardized SCM, Ormaniec et al. 2025), with moments taken
+from an independent reference sample of n_ref rows.
 
 Observed predictors are continuous, binary, or ordinal; the response is continuous or binary. A discrete variable
 is usually causal as observed (it is discretized during generation, and its children see the discrete value). With
@@ -80,40 +79,6 @@ additive_functions = {
     'step': lambda x: (x > 0).astype(float),
 }
 mlp_activations = ['tanh', 'relu', 'sin', 'bump', 'softplus', 'abs']
-
-default_prior = {
-    'family': 'general',
-    'p_range': [5, 100],
-    'n_range': [8, 1024],
-    'latent_zero_prob': 0.3,
-    'latent_fraction_range': [0.0, 0.3],
-    'indegree_range': [0.4, 2.5],
-    'cauchy_graph_prob': 0.5,
-    'mechanism_weights': {'additive': 0.4, 'mlp': 0.15, 'gp': 0.15, 'product': 0.1, 'linear': 0.2},
-    'additive_set': ['identity', 'tanh', 'sin', 'cos', 'square', 'abs', 'bump', 'relu', 'softplus', 'sigmoid'],
-    'noise_families': ['gaussian', 'laplace', 'uniform', 'student_t', 'mixture'],
-    'noise_fraction_range': [0.05, 0.95],
-    'binary_feature_prob': 0.1,
-    'ordinal_feature_prob': 0.1,
-    'ordinal_levels': [3, 7],
-    'binary_y_prob': 0.3,
-    'measurement_discretization_prob': 0.2,
-    'n_ref': 512,
-    'component_weights': {'scm': 0.5, 'xfirst': 0.5},
-    'xfirst': {
-        'structure_weights': {'independent': 0.1, 'factor': 0.5, 'ar': 0.1, 'scm': 0.3},
-        'transform_prob': 0.7,
-        'transform_weights': {'exp': 0.4, 'zero_inflated': 0.2, 'cube': 0.1, 'sqrt': 0.1, 'uniform': 0.1, 'bimodal': 0.1},
-        'all_discrete_prob': 0.15,
-        'all_transform_prob': 0.25,
-        'continuous_prob': 0.4,
-        'null_prob': 0.1,
-        'max_parent_fraction': 0.5,
-        'children_prob': 0.3,
-        'max_children': 3,
-        'max_spouses': 2,
-    },
-}
 
 #----------------------------------------------------------------
 # Graph
@@ -188,8 +153,6 @@ def draw_noise(rng, family, size):
     if family == 'mixture':
         shift = rng.uniform(1, 4)
         return rng.standard_normal(size) + shift * (rng.random(size) < rng.uniform(0.1, 0.5))
-    if family == 'gamma':
-        return rng.choice([-1, 1]) * rng.gamma(rng.uniform(0.5, 3), size=size)
     raise ValueError(f'unknown noise family: {family}')
 
 def additive_part(rng, P, function_set, function_weights=None):
@@ -229,8 +192,6 @@ def mechanism(rng, family, P, prior):
         return P @ (rng.choice([-1, 1], size=k) * rng.uniform(0.5, 1.5, size=k)) / np.sqrt(k)
     if family == 'additive':
         return additive_part(rng, P, prior['additive_set'], prior.get('additive_weights'))
-    if family == 'step':
-        return additive_part(rng, P, ['step'])
     if family == 'tree':
         return random_tree_part(rng, P)
     if family == 'mlp':
