@@ -1,15 +1,15 @@
 # Prior-data fitted networks for variable selection
 
-> Pretrained networks that return posterior inclusion probabilities for every covariate in one forward pass
+> Two pretrained prior-data fitted networks that return posterior inclusion probabilities for every covariate in one forward pass: **CD-PFN** estimates whether each covariate is conditionally dependent on the response, and **PC-PFN** estimates whether each covariate is a parent or child of the response in a directed acyclic graph.
 
 ## Associated paper
 
 - **Prior-data fitted networks for variable selection**  
-	[arXiv](TODO) • [Code to reproduce results](https://github.com/omelikechi/varselpfn-paper)
+	[arXiv](TODO)
 
 ## Installation
 ```
-pip install git+https://github.com/omelikechi/varselpfn
+pip install varselpfn
 ```
 
 ## Usage
@@ -21,12 +21,12 @@ rng = np.random.default_rng(0)
 X = rng.normal(size=(200, 50))
 y = X[:, 0] + np.sin(2 * X[:, 1]) + rng.normal(size=200)
 
-# CD-PFN: probability that each covariate is conditionally dependent on y
+# CD-PFN
 cd = CDPFN()
 pips = cd.predict(X, y)  # shape (50,)
 selected = cd.select(X, y, alpha=0.1)  # indices selected at target FDR 0.1
 
-# PC-PFN: probability that each covariate is a parent or child of y
+# PC-PFN
 pc = PCPFN()
 pips = pc.predict(X, y)  # shape (50, 2): parent and child PIPs
 selected = pc.select(X, y, alpha=0.1)  # {'parents': [...], 'children': [...]}
@@ -38,7 +38,7 @@ selected = pc.select(X, y, alpha=0.1)  # {'parents': [...], 'children': [...]}
 
 ## Fine-tuning
 
-To adapt a network to your data, copy its config ([`cd_pfn.json`](varselpfn/configs/cd_pfn.json) or [`pc_pfn.json`](varselpfn/configs/pc_pfn.json)), edit the `prior` block (options in [`prior.py`](varselpfn/prior.py)), and continue training from the released weights:
+To adapt a network to your data, copy its config ([`cd_pfn.json`](https://github.com/omelikechi/varselpfn/blob/main/varselpfn/configs/cd_pfn.json) or [`pc_pfn.json`](https://github.com/omelikechi/varselpfn/blob/main/varselpfn/configs/pc_pfn.json)), edit the `prior` block (options in [`prior.py`](https://github.com/omelikechi/varselpfn/blob/main/varselpfn/prior.py)), and continue training from the released weights:
 
 ```
 python -m varselpfn.train --config my_prior.json --init cd_pfn --run-dir my_run --max-minutes 120
