@@ -5,7 +5,7 @@
 ## Associated paper
 
 - **Prior-data fitted networks for variable selection**  
-	[arXiv](TODO)
+	[arXiv](https://arxiv.org/abs/2611.05966)
 
 ## Installation
 ```
