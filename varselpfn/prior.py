@@ -592,7 +592,7 @@ def sample_dataset_xfirst(rng, prior, n, p, keep_info=False):
         else:
             X_obs, X_par, feature_type, kind = sample_predictors(rng, n, p, prior)
         k_max = max(1, int(p * xp['max_parent_fraction']))
-        # neighbourhood size: none (null_prob), else uniform on 1..k_max with probability parent_uniform_prob (dense
+        # neighborhood size: none (null_prob), else uniform on 1..k_max with probability parent_uniform_prob (dense
         # supports), otherwise log-uniform (mostly sparse); configs without parent_uniform_prob draw as before
         if rng.random() < xp['null_prob']:
             k = 0
@@ -601,8 +601,8 @@ def sample_dataset_xfirst(rng, prior, n, p, keep_info=False):
         else:
             k = log_uniform_int(rng, 1, k_max)
         if 'child_share' in xp:
-            # k counts direct neighbours (parents and children); a share of them become children, so roles change
-            # without adding neighbours
+            # k counts direct neighbors (parents and children); a share of them become children, so roles change
+            # without adding neighbors
             n_children = int(rng.binomial(k, xp['child_share']))
             k -= n_children
         parents = rng.choice(p, size=k, replace=False)
@@ -640,7 +640,7 @@ def sample_dataset_xfirst(rng, prior, n, p, keep_info=False):
             n_spouses = min(len(others), int(rng.integers(0, xp['max_spouses'] + 1)))
             if xp.get('spouses_near_child', False) and n_spouses:
                 # spouses among the predictors most correlated with the replaced column, so the child keeps
-                # dependence on its neighbourhood through observed parents (no latent parent of a child)
+                # dependence on its neighborhood through observed parents (no latent parent of a child)
                 corr = np.abs(X_par[n:, others].T @ X_par[n:, c]) / prior['n_ref']
                 pool = others[np.argsort(-corr)[:max(3 * n_spouses, 5)]]
                 extra = rng.choice(pool, size=min(n_spouses, len(pool)), replace=False)
