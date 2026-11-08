@@ -1,0 +1,18 @@
+cff-version: 1.2.0
+message: If you use varselpfn, please cite the paper.
+title: varselpfn
+version: 0.2.0
+license: MIT
+repository-code: https://github.com/omelikechi/varselpfn
+authors:
+  - family-names: Melikechi
+    given-names: Omar
+preferred-citation:
+  type: article
+  title: Prior-data fitted networks for variable selection
+  authors:
+    - family-names: Melikechi
+      given-names: Omar
+  journal: arXiv preprint arXiv:2611.05966
+  year: 2026
+  url: https://arxiv.org/abs/2611.05966
