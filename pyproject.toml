@@ -12,12 +12,27 @@ license-files = ['LICENSE', 'THIRD_PARTY_NOTICES']
 authors = [{name = 'Omar Melikechi', email = 'omar.melikechi@duke.edu'}]
 requires-python = '>=3.10'
 dependencies = ['numpy>=1.24', 'safetensors>=0.4', 'scipy>=1.10', 'threadpoolctl>=3.0', 'torch>=2.1']
+keywords = ['variable selection', 'feature selection', 'prior-data fitted networks', 'posterior inclusion probabilities', 'conditional dependence', 'causal discovery', 'tabular foundation models']
+classifiers = [
+    'Development Status :: 4 - Beta',
+    'Intended Audience :: Science/Research',
+    'Operating System :: OS Independent',
+    'Programming Language :: Python :: 3',
+    'Programming Language :: Python :: 3.10',
+    'Programming Language :: Python :: 3.11',
+    'Programming Language :: Python :: 3.12',
+    'Programming Language :: Python :: 3.13',
+    'Topic :: Scientific/Engineering :: Artificial Intelligence',
+    'Topic :: Scientific/Engineering :: Mathematics',
+]
 
 [project.optional-dependencies]
 pandas = ['pandas>=1.5']
 
 [project.urls]
 Repository = 'https://github.com/omelikechi/varselpfn'
+Paper = 'https://arxiv.org/abs/2611.05966'
+Changelog = 'https://github.com/omelikechi/varselpfn/blob/main/CHANGELOG.md'
 
 [tool.setuptools]
 packages = ['varselpfn']

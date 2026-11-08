@@ -25,7 +25,7 @@ y = X[:, 0] + np.sin(2 * X[:, 1]) + rng.normal(size=200)
 
 cd = CDPFN()
 pips = cd.predict(X, y)  # shape (50,)
-selected = cd.select(X, y, alpha=0.1)  # Bayesian FDR rule at level 0.1
+selected = cd.select(X, y, alpha=0.1)  # array([0, 1]), by the Bayesian FDR rule at level 0.1
 
 pc = PCPFN()
 pips = pc.predict(X, y)  # shape (50, 2): parent and child
@@ -37,7 +37,7 @@ With a DataFrame, results are indexed by column name. Any column types work (num
 ## Notes
 
 - `y` can be continuous, binary, or (for CD-PFN) multiclass. For a multiclass `y`, the scores are the mean of the one-vs-rest PIPs.
-- The networks were trained on 16 to 1,024 rows and 8 to 512 covariates. More rows give better rankings, but PIPs from more than 1,024 rows can be overconfident, and `select()` warns when that happens. Use `CDPFN(max_rows=1024)` to stay within the training range.
+- The networks were trained on 16 to 1,024 rows and 8 to 512 covariates. More rows give better rankings, but PIPs from more than 1,024 rows can be overconfident, and `select()` warns when that happens. Pass `max_rows=1024` to stay within the training range.
 - Rare classes and covariates with extreme values are handled automatically. See `help(CDPFN)` for all options.
 - Pass `device='cuda'` (or `'mps'`) to run on a GPU.
 
