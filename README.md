@@ -1,6 +1,6 @@
 # varselpfn
 
-[![Paper](https://img.shields.io/badge/Paper-arXiv-b31b1b?style=for-the-badge&logo=arxiv&logoColor=white)](https://arxiv.org/abs/2611.05966)
+[![Paper](https://img.shields.io/badge/Paper-arXiv-1f6feb?style=for-the-badge&logo=arxiv&logoColor=white)](https://arxiv.org/abs/2611.05966)
 
 Variable selection with pretrained prior-data fitted networks. In one forward pass:
 
