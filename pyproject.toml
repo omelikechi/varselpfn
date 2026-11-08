@@ -4,7 +4,7 @@ build-backend = 'setuptools.build_meta'
 
 [project]
 name = 'varselpfn'
-version = '0.1.0'
+version = '0.2.0'
 description = 'Variable selection with prior-data fitted networks: CD-PFN and PC-PFN'
 readme = 'README.md'
 license = 'MIT'
