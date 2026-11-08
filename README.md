@@ -1,10 +1,8 @@
 # varselpfn
 
-[![PyPI](https://img.shields.io/pypi/v/varselpfn)](https://pypi.org/project/varselpfn/)
-[![arXiv](https://img.shields.io/badge/arXiv-2611.05966-b31b1b)](https://arxiv.org/abs/2611.05966)
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue)](https://github.com/omelikechi/varselpfn/blob/main/LICENSE)
+[![Paper](https://img.shields.io/badge/Paper-arXiv-b31b1b?style=for-the-badge&logo=arxiv&logoColor=white)](https://arxiv.org/abs/2611.05966)
 
-Variable selection with pretrained prior-data fitted networks. In one forward pass, with nothing fitted to your data:
+Variable selection with pretrained prior-data fitted networks. In one forward pass:
 
 - **CD-PFN** gives the posterior probability that the response depends on each covariate given the others.
 - **PC-PFN** gives the posterior probabilities that each covariate is a parent or a child of the response in a directed acyclic graph.

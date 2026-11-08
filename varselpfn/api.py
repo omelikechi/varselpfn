@@ -1,7 +1,7 @@
 # CD-PFN and PC-PFN
 '''
 CDPFN and PCPFN wrap the pretrained networks. predict(X, y) returns estimated posterior inclusion probabilities (PIPs)
-in one forward pass, with nothing fitted to the data; select(X, y, alpha) applies the Bayesian FDR rule to them. Inputs
+in one forward pass; select(X, y, alpha) applies the Bayesian FDR rule to them. Inputs
 are prepared automatically (covariates_matrix, response_vector, row_budget).
 
 Weights are the bundled ones ('cd_pfn', 'pc_pfn') unless a path is given: a .safetensors file or a checkpoint written
